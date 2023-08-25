@@ -11,16 +11,15 @@ class PokemonService {
         try {
             var promises = []
             const responseList = await this.pokedex.getPokemonsList({ offset, limit });
-                
             responseList.results.forEach(element => {
-                var promise = this.pokedex.getPokemonsByName(element.name)    
+                var promise = this.pokedex.getPokemonByName(element.name)    
                 promises.push(promise)
             });
             const responseDetails = await Promise.all(promises);
             return responseDetails
             
         } catch (error) {
-            throw new Error("Error fetching Pokémon data");
+            console.error(error.message);
         }
     }
 }
@@ -37,11 +36,14 @@ class HtmlBuilder {
     }
 
     createCard(pokemon) {
-         
+        let div = document.createElement("div");
+        div.innerHTML = pokemon.name;
+        console.log(pokemon)
+        this.container.append(div); 
     }
   
     displayPokemonCards(pokemons) {
-         console.log(pokemons)
+        pokemons.forEach(pokemon => this.createCard(pokemon))
     }
 }
   
